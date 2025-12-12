@@ -1,0 +1,16 @@
+export enum Tag {
+  Portrait = 'Portrait',
+  Landscape = 'Landscape',
+  Street = 'Street',
+  Wildlife = 'Wildlife',
+  Architecture = 'Architecture',
+  Macro = 'Macro',
+  BlackAndWhite = 'Black & White',
+  Minimalism = 'Minimalism',
+  Cinematic = 'Cinematic',
+  Vintage = 'Vintage',
+  Abstract = 'Abstract',
+  Night = 'Night Photography',
+  GoldenHour = 'Golden Hour',
+  LongExposure = 'Long Exposure',
+}
