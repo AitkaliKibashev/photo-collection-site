@@ -95,13 +95,10 @@ const Filters: React.FC<FiltersProps> = ({ values, setValues }) => {
   }
 
   return (
-    <div className="rounded-xl bg-white p-3 shadow sm:p-4">
-      <h3 className="mb-3 border-b pb-2 text-xl font-bold text-gray-800 sm:mb-4 sm:text-2xl">
-        Tags
-      </h3>
+    <div>
       <motion.div
         layout
-        className="flex flex-wrap gap-2 sm:gap-3"
+        className="flex flex-wrap gap-2"
         transition={{ layout: { duration: 0.3, ease: 'easeInOut' } }}
       >
         {sortedTags.map((tag) => (

@@ -70,10 +70,10 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile hamburger button */}
+      {/* Mobile hamburger button - fixed at bottom */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="fixed top-4 left-4 z-50 flex items-center justify-center rounded-lg bg-white p-2 shadow-lg md:hidden"
+        className="fixed bottom-4 left-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white p-3 shadow-lg transition-transform hover:scale-110 md:hidden"
         aria-label="Toggle menu"
       >
         {isMobileMenuOpen ? (

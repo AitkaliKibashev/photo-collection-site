@@ -7,7 +7,7 @@ const Page = () => {
     <div className={'min-h-screen w-full bg-gray-100'}>
       <Sidebar />
       <Container>
-        <div className={'flex gap-4 pt-16 md:ml-[300px] md:pt-0'}>
+        <div className={'flex gap-4 pt-3 md:ml-[300px] md:pt-0'}>
           <GalleryGrid />
         </div>
       </Container>

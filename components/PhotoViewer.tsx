@@ -1,6 +1,6 @@
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Image } from '@/types/Image'
-import { FC, useState } from 'react'
+import { FC, useState, useEffect, useCallback } from 'react'
 import {
   Carousel,
   CarouselContent,
@@ -9,6 +9,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel'
 import { Maximize, Minimize, X } from 'lucide-react'
+import type { UseEmblaCarouselType } from 'embla-carousel-react'
 
 interface PhotoViewerProps {
   images: Image[]
@@ -24,8 +25,11 @@ const PhotoViewer: FC<PhotoViewerProps> = ({
   isActive,
 }) => {
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [carouselApi, setCarouselApi] = useState<
+    UseEmblaCarouselType[1] | null
+  >(null)
 
-  const toggleFullscreen = async () => {
+  const toggleFullscreen = useCallback(async () => {
     if (!document.fullscreenElement) {
       await document.documentElement.requestFullscreen()
       setIsFullscreen(true)
@@ -33,14 +37,55 @@ const PhotoViewer: FC<PhotoViewerProps> = ({
       await document.exitFullscreen()
       setIsFullscreen(false)
     }
-  }
+  }, [])
 
-  const closeDialog = () => {
+  const closeDialog = useCallback(() => {
     setIsActive(false)
     if (isFullscreen) {
       toggleFullscreen()
     }
-  }
+  }, [isFullscreen, setIsActive, toggleFullscreen])
+
+  // Hot keys handler
+  useEffect(() => {
+    if (!isActive) return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // ESC - закрыть
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        closeDialog()
+        return
+      }
+
+      // F - fullscreen
+      if (event.key === 'f' || event.key === 'F') {
+        event.preventDefault()
+        toggleFullscreen()
+        return
+      }
+
+      // ArrowLeft - предыдущее изображение
+      if (event.key === 'ArrowLeft' && carouselApi) {
+        event.preventDefault()
+        carouselApi.scrollPrev()
+        return
+      }
+
+      // ArrowRight - следующее изображение
+      if (event.key === 'ArrowRight' && carouselApi) {
+        event.preventDefault()
+        carouselApi.scrollNext()
+        return
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isActive, carouselApi, closeDialog, toggleFullscreen])
 
   return (
     <Dialog open={isActive} onOpenChange={setIsActive}>
@@ -78,6 +123,7 @@ const PhotoViewer: FC<PhotoViewerProps> = ({
         <div className="flex h-full w-full items-center justify-center overflow-hidden px-2 sm:px-4">
           <Carousel
             className="flex h-full w-full max-w-full items-center"
+            setApi={setCarouselApi}
             opts={{
               startIndex: images.findIndex(
                 (image) => image.id === currentImageId,

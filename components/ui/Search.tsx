@@ -44,7 +44,7 @@ const Search = ({
   }
 
   return (
-    <InputGroup className={'w-full bg-white'}>
+    <InputGroup className={'w-full rounded-2xl bg-white'}>
       <InputGroupAddon>
         <SearchIcon className="h-4 w-4" />
       </InputGroupAddon>
