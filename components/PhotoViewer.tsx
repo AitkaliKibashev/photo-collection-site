@@ -45,13 +45,15 @@ const PhotoViewer: FC<PhotoViewerProps> = ({
   return (
     <Dialog open={isActive} onOpenChange={setIsActive}>
       <DialogContent
-        className={'w-full !max-w-none border-none bg-transparent shadow-none'}
+        className={
+          'h-full w-full max-w-full border-none bg-transparent px-0 shadow-none sm:max-w-full sm:px-4'
+        }
         overlayClassname={isFullscreen ? 'bg-black' : undefined}
         showCloseButton={false}
       >
         <div
           className={
-            'absolute -top-12 right-4 z-50 flex gap-3 sm:-top-16 sm:right-8 sm:gap-5'
+            'absolute top-4 right-4 z-50 flex gap-3 sm:top-6 sm:right-8 sm:gap-5'
           }
         >
           <button
@@ -73,37 +75,43 @@ const PhotoViewer: FC<PhotoViewerProps> = ({
             <X className="h-6 w-6 text-white sm:h-8 sm:w-8" />
           </button>
         </div>
-        <Carousel
-          className="mx-auto w-full"
-          opts={{
-            startIndex: images.findIndex(
-              (image) => image.id === currentImageId,
-            ),
-            loop: true,
-          }}
-        >
-          <CarouselContent>
-            {images.map((image) => (
-              <CarouselItem className={''} key={image.id + 'carousel'}>
-                <div className="flex h-[70vh] w-full items-center justify-center px-2 sm:h-[80vh] sm:px-0">
-                  <img
-                    src={image.url}
-                    className="max-h-[70vh] w-full object-contain sm:max-h-[80vh]"
-                    alt={image.title}
-                  />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious
-            className={'my-carousel-btn h-full w-16 text-white sm:w-[300px]'}
-            variant={'link'}
-          />
-          <CarouselNext
-            className={'my-carousel-btn h-full w-16 text-white sm:w-[300px]'}
-            variant={'link'}
-          />
-        </Carousel>
+        <div className="flex h-full w-full items-center justify-center overflow-hidden px-2 sm:px-4">
+          <Carousel
+            className="flex h-full w-full max-w-full items-center"
+            opts={{
+              startIndex: images.findIndex(
+                (image) => image.id === currentImageId,
+              ),
+              loop: true,
+            }}
+          >
+            <CarouselContent className="h-full">
+              {images.map((image) => (
+                <CarouselItem key={image.id + 'carousel'}>
+                  <div className="flex h-full min-h-0 w-full items-center justify-center overflow-hidden">
+                    <img
+                      src={image.url}
+                      className="h-auto max-h-[80vh] w-auto max-w-full object-contain"
+                      alt={image.title}
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious
+              className={
+                'my-carousel-btn h-full w-[100px] text-white sm:w-[300px]'
+              }
+              variant={'link'}
+            />
+            <CarouselNext
+              className={
+                'my-carousel-btn h-full w-[100px] text-white sm:w-[300px]'
+              }
+              variant={'link'}
+            />
+          </Carousel>
+        </div>
       </DialogContent>
     </Dialog>
   )
