@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Geist_Mono, Oswald } from 'next/font/google'
 import './globals.css'
 import AuthProvider from '@/providers/AuthProvider'
+import AnalyticsTracker from '@/components/AnalyticsTracker'
 
 const oswaldSans = Oswald({
   variable: '--font-geist-sans',
@@ -29,7 +30,10 @@ export default function RootLayout({
       <body
         className={`${oswaldSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <AnalyticsTracker />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
