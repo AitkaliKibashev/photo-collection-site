@@ -13,4 +13,6 @@ export enum Tag {
   Night = 'Night Photography',
   GoldenHour = 'Golden Hour',
   LongExposure = 'Long Exposure',
+  Nature = 'Nature',
+  Candid = 'Candid',
 }

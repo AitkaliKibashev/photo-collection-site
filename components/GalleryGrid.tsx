@@ -93,6 +93,18 @@ const GalleryGrid = () => {
   const observerTarget = useRef<HTMLDivElement>(null)
 
   const loadingRef = useRef(false)
+  const selectedTagsRef = useRef(selectedTags)
+  const lastDocRef = useRef(lastDoc)
+  const hasMountedRef = useRef(false)
+
+  // Обновляем refs при изменении значений
+  useEffect(() => {
+    selectedTagsRef.current = selectedTags
+  }, [selectedTags])
+
+  useEffect(() => {
+    lastDocRef.current = lastDoc
+  }, [lastDoc])
 
   const loadImages = useCallback(
     async (reset: boolean = false) => {
@@ -102,8 +114,8 @@ const GalleryGrid = () => {
       setLoading(true)
 
       try {
-        const currentTags = selectedTags
-        const currentLastDoc = reset ? null : lastDoc
+        const currentTags = selectedTagsRef.current
+        const currentLastDoc = reset ? null : lastDocRef.current
 
         const result = await fetchImages({
           selectedTags: currentTags,
@@ -121,17 +133,20 @@ const GalleryGrid = () => {
         setHasMore(result.hasMore)
       } catch (error) {
         console.error('Error loading images:', error)
+        setHasMore(false)
       } finally {
         setLoading(false)
         setInitialLoading(false)
         loadingRef.current = false
       }
     },
-    [selectedTags, lastDoc],
+    [], // Убираем зависимости, используем refs
   )
 
   // Загрузка при изменении фильтров
   useEffect(() => {
+    if (!hasMountedRef.current) return // Пропускаем первый рендер
+
     setInitialLoading(true)
     setImages([])
     setLastDoc(null)
@@ -139,9 +154,12 @@ const GalleryGrid = () => {
     loadImages(true)
   }, [selectedTags, loadImages])
 
-  // Начальная загрузка
+  // Начальная загрузка (только один раз)
   useEffect(() => {
-    loadImages(true)
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true
+      loadImages(true)
+    }
   }, [loadImages])
 
   // Infinite scroll observer
@@ -215,7 +233,7 @@ const GalleryGrid = () => {
                 {loading && <Spinner />}
               </div>
             )}
-            {!hasMore && images.length > 0 && !searchQuery && (
+            {!hasMore && images.length > 0 && !searchQuery && !loading && (
               <div className="py-8 text-center text-gray-500">
                 No more images to load
               </div>
