@@ -222,9 +222,9 @@ const GalleryGrid = () => {
         ) : (
           <>
             <Masonry
-              breakpointCols={{ default: 4, 1100: 3, 700: 2, 500: 1 }}
-              className="my-masonry-grid"
-              columnClassName="my-masonry-grid_column"
+              breakpointCols={{ default: 5, 1100: 3, 700: 2 }}
+              className="-ml-2 flex w-auto md:-ml-4"
+              columnClassName=" pl-2 bg-clip-padding [&>div]:mb-2 md:pl-4 md:[&>div]:mb-4"
             >
               {items}
             </Masonry>
